@@ -1,0 +1,21 @@
+[package]
+name = "yeah"
+version = "0.1.0"
+authors = ["Raymond Douglas <r@rymnd.org>"]
+edition = "2018"
+license-file = "LICENSE"
+description = "CLI tool to return the vendor name for a given MAC address"
+documentation = "https://github.com/raylas/yeah"
+homepage = "https://github.com/raylas/yeah"
+repository = "https://github.com/raylas/yeah"
+
+[profile.release]
+incremental = false 
+opt-level = 'z'     # Optimize for size.
+lto = true          # Enable Link Time Optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations.
+panic = 'abort'     # Abort on panic
+
+[dependencies]
+regex = { version = "1.3.4" }
+reqwest = { version = "0.9" }
