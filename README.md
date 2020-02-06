@@ -2,7 +2,7 @@
 
 [![crates.io](https://img.shields.io/crates/v/yeah.svg)](https://crates.io/crates/yeah)
 
-yeah is command-line tool to return the vendor name for a given MAC address. Queries are ran against the [IEEE OUI vendor list](http://standards-oui.ieee.org/oui.txt).
+yeah is a command-line tool to return the vendor name for a given MAC address. Queries are ran against the [IEEE OUI vendor list](http://standards-oui.ieee.org/oui.txt).
 
 Functionality:
 
