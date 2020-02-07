@@ -26,12 +26,16 @@ impl Config {
             return Err("not enough arguments");
         } else if args.len() > 2 {
             return Err("too many arguments");
-        } else if args[1] == "-h" || args[1] == "--help" {
-            help();
-            process::exit(1);
-        } else if args[1] == "-v" || args[1] == "--version" {
-            version();
-            process::exit(1);
+        } else if args[1].contains("-") || args[1].contains("--") {
+            if args[1] == "-h" || args[1] == "--help" {
+                help();
+                process::exit(1);
+            } else if args[1] == "-v" || args[1] == "--version" {
+                version();
+                process::exit(1);
+            } else {
+                return Err("illegal argument(s)")
+            }
         }
         
         let query = args[1].clone();
