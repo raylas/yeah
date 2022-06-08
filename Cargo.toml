@@ -17,7 +17,7 @@ codegen-units = 1   # Reduce number of codegen units to increase optimizations.
 panic = 'abort'     # Abort on panic
 
 [dependencies]
-pico-args = "0.4.2"
+pico-args = "0.5.0"
 prettytable-rs = "^0.8"
 regex = "1"
 reqwest = { version = "0.11.10", features = ["blocking"] }
