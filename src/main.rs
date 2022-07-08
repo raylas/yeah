@@ -22,31 +22,29 @@ fn print_version() {
 /// Parse command-line arguments, and only accept a single free-floating argument.
 /// 
 /// Return `Arguments` data structure.
-fn parse_args() -> Arguments {
-    let mut args = pico_args::Arguments::from_env();
-
-    if args.contains(["-h", "--help"]) {
+fn parse_args() -> Result<Arguments, pico_args::Error> {
+    let mut pargs = pico_args::Arguments::from_env();
+  
+    if pargs.contains(["-h", "--help"]) {
         print_usage();
     }
-
-    if args.contains(["-v", "--version"]) {
+  
+    if pargs.contains(["-v", "--version"]) {
         print_version();
     }
-
-    let table = args.contains(["-t", "--table"]);
-
-    let query: String = args.free_from_str().unwrap();
-
-    let orphans = args.finish();
+  
+    let args = Arguments {
+        query: pargs.free_from_str()?,
+        table: pargs.contains(["-t", "--table"])
+    };
+  
+    let orphans = pargs.finish();
     if !orphans.is_empty() {
         eprintln!("warning: unused arguments: {:?}", orphans);
     }
-
-    Arguments {
-        query,
-        table
-    }
-}
+  
+    Ok(args)
+  }
 
 use std::error::Error;
 
@@ -137,7 +135,13 @@ fn print_table(results: &[Vec<&str>]) {
 } 
 
 fn main() {
-    let args = parse_args();
+    let args = match parse_args() {
+        Ok(v) => v,
+        Err(e) => {
+            eprintln!("error: {}", e);
+            std::process::exit(1);
+        }
+    };
 
     let vendors = match get_vendors() {
         Ok(v) => v,
