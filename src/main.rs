@@ -72,8 +72,7 @@ use regex::RegexBuilder;
 /// Return a vector of vectors of str containing the mapped `OUI` and `vendor`.
 fn find_matches<'a>(mac: &str, vendors: &'a str) -> Result<Vec<Vec<&'a str>>, Box<dyn Error>> {
     let oui = &mac
-        .replace(':', "")
-        .replace('-', "");
+        .replace([':', '-'], "");
 
     let len: usize = if oui.len() < 6 { oui.len() } else { 6 };   
 
@@ -122,7 +121,7 @@ F492BF     (base 16)    Ubiquiti Networks Inc.";
     assert_ne!(find_matches("E492BF", vendors).unwrap(), result);
 }
 
-use prettytable::{Table, row, cell};
+use prettytable::{Table, row};
 
 fn print_table(results: &[Vec<&str>]) {
     let mut table = Table::new();
