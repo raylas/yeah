@@ -20,4 +20,4 @@ panic = 'abort'     # Abort on panic
 pico-args = "0.5.0"
 prettytable-rs = "^0.10"
 regex = "1"
-reqwest = { version = "0.11.18", features = ["blocking"] }
+reqwest = { version = "0.11.20", features = ["blocking"] }
