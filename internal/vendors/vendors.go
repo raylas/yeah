@@ -3,9 +3,9 @@ package vendors
 import "strings"
 
 type VendorEntry struct {
-	Oui     string
-	Name    string
-	Address string
+	Oui     string `json:"oui"`
+	Name    string `json:"name"`
+	Address string `json:"address"`
 }
 
 type VendorNode struct {
@@ -28,8 +28,10 @@ func New() *Vendors {
 }
 
 func (v *Vendors) Insert(prefix string, data *VendorEntry) {
+	normalized := normalize(prefix)
 	node := v.Root
-	for _, char := range prefix {
+
+	for _, char := range normalized {
 		if _, found := node.Children[char]; !found {
 			node.Children[char] = &VendorNode{Children: make(map[rune]*VendorNode)}
 		}
@@ -41,33 +43,30 @@ func (v *Vendors) Insert(prefix string, data *VendorEntry) {
 
 func (v *Vendors) Search(prefix string) []*VendorEntry {
 	normalized := normalize(prefix)
-
 	node := v.Root
-	var lastMatchNode *VendorNode
+	var lastMatch *VendorNode
 
-	for i := 0; i < len(normalized); i++ {
-		char := rune(normalized[i])
-		if next, found := node.Children[char]; found {
-			node = next
-			if node.IsEnd {
-				lastMatchNode = node
+	for _, char := range normalized {
+		next, found := node.Children[char]
+		if !found {
+			// For full MAC addresses, return the last valid OUI match if we found one
+			if len(normalized) >= 12 && lastMatch != nil {
+				return []*VendorEntry{lastMatch.Data}
 			}
-		} else {
-			// // If we can't match the full string but we're at a valid node,
-			// // return all matches from current position
-			// if i < 8 { // Less than 8 chars means it's a partial search
-			// 	return v.collect(node)
-			// }
-			break
+			return nil
+		}
+		node = next
+		if node.IsEnd {
+			lastMatch = node
 		}
 	}
 
-	// For full MAC addresses, return the longest match we found
-	if len(normalized) >= 8 && lastMatchNode != nil {
-		return []*VendorEntry{lastMatchNode.Data}
+	// For full MAC addresses, return only the longest match
+	if len(normalized) >= 12 && lastMatch != nil {
+		return []*VendorEntry{lastMatch.Data}
 	}
 
-	// For partial searches, return all matches from where we ended
+	// For partial searches, return all matches from where we ended up
 	return v.collect(node)
 }
 
@@ -85,5 +84,8 @@ func (v *Vendors) collect(node *VendorNode) []*VendorEntry {
 func normalize(prefix string) string {
 	replacer := strings.NewReplacer(":", "", "-", "", ".", "")
 	replaced := replacer.Replace(prefix)
+	if len(replaced) > 12 {
+		replaced = replaced[:12]
+	}
 	return strings.ToUpper(replaced)
 }

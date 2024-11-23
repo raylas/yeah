@@ -1,10 +1,12 @@
 package encode
 
 import (
+	"context"
 	"encoding/csv"
 	"fmt"
 	"net/http"
 
+	"github.com/rs/zerolog/log"
 	"rymnd.net/yeah/internal/vendors"
 )
 
@@ -18,11 +20,12 @@ var (
 	}
 )
 
-func collect(v *vendors.Vendors) error {
+func collect(ctx context.Context, v *vendors.Vendors) error {
 	for _, source := range sources {
 		if err := download(v, source); err != nil {
 			return err
 		}
+		log.Ctx(ctx).Info().Str("source", source).Msg("encoded")
 	}
 	return nil
 }

@@ -1,6 +1,7 @@
 package encode
 
 import (
+	"context"
 	"encoding/gob"
 	"os"
 	"path/filepath"
@@ -12,9 +13,9 @@ const (
 	vendorsDest = "internal/data/vendors.gob"
 )
 
-func Vendors() error {
+func Vendors(ctx context.Context) error {
 	v := vendors.New()
-	if err := collect(v); err != nil {
+	if err := collect(ctx, v); err != nil {
 		return err
 	}
 	return serialize(v, vendorsDest)

@@ -6,8 +6,8 @@
       "type": "go",
       "request": "launch",
       "mode": "auto",
-      "program": "${fileDirname}",
-      "args": ["3f"]
+      "program": "${workspaceFolder}/cmd/yeah/main.go",
+      // "args": ["3f"]
     }
   ]
 }
