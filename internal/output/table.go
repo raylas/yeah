@@ -18,24 +18,16 @@ func NewTable(writer io.Writer) *Table {
 }
 
 func (t *Table) WriteHeader(columns []string) error {
-	painted := make([]string, len(columns))
-	for c, column := range columns {
-		painted[c] = fmt.Sprintf("%v%v%v", Default, column, Reset)
-	}
-	_, err := fmt.Fprintln(&t.w, strings.Join(painted, "\t"))
+	_, err := fmt.Fprintln(&t.w, strings.Join(columns, "\t"))
 	return err
 }
 
 func (t *Table) WriteResource(fields []Field) error {
-	painted := make([]string, len(fields))
-	for f, field := range fields {
-		color := Default
-		if field.C != "" {
-			color = field.C
-		}
-		painted[f] = fmt.Sprintf("%v%v%v", color, field.T, Reset)
+	stringFields := make([]string, len(fields))
+	for i, f := range fields {
+		stringFields[i] = f.T
 	}
-	_, err := fmt.Fprintln(&t.w, strings.Join(painted, "\t"))
+	_, err := fmt.Fprintln(&t.w, strings.Join(stringFields, "\t"))
 	return err
 }
 

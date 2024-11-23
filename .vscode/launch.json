@@ -7,7 +7,7 @@
       "request": "launch",
       "mode": "auto",
       "program": "${fileDirname}",
-      "args": ["84:8b:cf:7e:0b:1a"]
+      "args": ["3f"]
     }
   ]
 }
