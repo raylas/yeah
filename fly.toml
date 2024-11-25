@@ -1,0 +1,12 @@
+app = "yeah"
+primary_region = "lax"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[http_service]
+internal_port = 8080
+force_https = false
+auto_stop_machines = "suspend"
+auto_start_machines = true
+min_machines_running = 0

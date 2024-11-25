@@ -2,7 +2,8 @@ package output
 
 import (
 	"fmt"
-	"os"
+	"io"
+	"strings"
 )
 
 type Writer interface {
@@ -15,14 +16,22 @@ type Field struct {
 	T string // Text
 }
 
-func NewWriter(format string) (Writer, error) {
-	writer := os.Stdout
+func NewWriter(writer io.Writer, format string) (Writer, error) {
 	switch {
 	case format == "table":
 		return NewTable(writer), nil
 	case format == "json":
 		return NewJSON(writer), nil
+	case format == "html":
+		return NewHTML(writer), nil
 	default:
 		return nil, fmt.Errorf("output format %q is not supported", format)
 	}
+}
+
+func toString(v interface{}) string {
+	if v == nil {
+		return ""
+	}
+	return strings.TrimSpace(strings.Replace(fmt.Sprint(v), "\n", "", -1))
 }

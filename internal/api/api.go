@@ -31,7 +31,10 @@ func Run(ctx context.Context, args cli.Args, v *vendors.Vendors) error {
 
 	// Set up routes
 	m := http.NewServeMux()
-	m.Handle("/{query}", handleSearch(v))
+	m.Handle("/{query}", handleRawSearch(v))
+	m.Handle("/{query}/html", handleHtmlSearch(v))
+	m.Handle("/sources", handleSources(v))
+	m.Handle("/", handleRoot(v))
 
 	// Start the HTTP server
 	s := new(ctx, m)

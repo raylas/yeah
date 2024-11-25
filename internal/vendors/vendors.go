@@ -1,6 +1,10 @@
 package vendors
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+	"time"
+)
 
 type VendorEntry struct {
 	Oui     string `json:"oui"`
@@ -14,9 +18,14 @@ type VendorNode struct {
 	Data     *VendorEntry
 }
 
+type VendorSource struct {
+	URL string    `json:"url"`
+	Rev time.Time `json:"rev"`
+}
+
 type Vendors struct {
-	Root *VendorNode
-	// Revision string
+	Root    *VendorNode
+	Sources []*VendorSource
 }
 
 func New() *Vendors {
@@ -24,7 +33,17 @@ func New() *Vendors {
 		Root: &VendorNode{
 			Children: make(map[rune]*VendorNode),
 		},
+		Sources: make([]*VendorSource, 0),
 	}
+}
+
+func (v *Vendors) Reference(url, rev string) error {
+	revTime, err := time.Parse(time.RFC1123, rev)
+	if err != nil {
+		return fmt.Errorf("failed to parse revision time: %w", err)
+	}
+	v.Sources = append(v.Sources, &VendorSource{URL: url, Rev: revTime})
+	return nil
 }
 
 func (v *Vendors) Insert(prefix string, data *VendorEntry) {

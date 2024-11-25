@@ -1,2 +1,9 @@
-- [ ] If anything beyond `3` in `3fcf42` doesn't exist, don't return all matches
+- [x] If anything beyond `3` in `3fcf42` doesn't exist, don't return all matches
       for `3*`
+- [ ] CI
+  - Updating vendors
+  - Auto-deploys
+- [ ] Tracing/logs
+- [ ] Styling
+- [ ] Include address in HTML (checkbox)
+- [ ] Export JSON button

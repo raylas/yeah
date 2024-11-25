@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/rs/zerolog/log"
 	"rymnd.net/yeah/internal/vendors"
 )
 
@@ -18,7 +19,11 @@ func Vendors(ctx context.Context) error {
 	if err := collect(ctx, v); err != nil {
 		return err
 	}
-	return serialize(v, vendorsDest)
+	if err := serialize(v, vendorsDest); err != nil {
+		return err
+	}
+	log.Ctx(ctx).Info().Str("dest", vendorsDest).Msg("written")
+	return nil
 }
 
 func serialize(v *vendors.Vendors, d string) error {

@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"rymnd.net/yeah/internal/output"
 	"rymnd.net/yeah/internal/vendors"
@@ -11,7 +12,7 @@ import (
 type Args struct {
 	Macs     []string `arg:"positional"`
 	Wide     bool     `arg:"-w,--" help:"include additional fields"`
-	Output   string   `arg:"-o,--" help:"output format (table,json)" default:"table"`
+	Output   string   `arg:"-o,--" help:"output format (table,json,html)" default:"table"`
 	Listen   bool     `arg:"-l,--" help:"run server"`
 	Bind     string   `arg:"-b,--" help:"server bind address" default:":8080"`
 	LogLevel string   `arg:"-v,--" help:"log level (info,debug)" default:"info"`
@@ -25,13 +26,13 @@ func Run(ctx context.Context, args Args, v *vendors.Vendors) error {
 	}
 
 	// Create output writer
-	w, err := output.NewWriter(args.Output)
+	w, err := output.NewWriter(os.Stdout, args.Output)
 	if err != nil {
 		return fmt.Errorf("failed to create output writer: %w", err)
 	}
 
 	// Create output headers
-	headers := []string{"OUI", "Organization"}
+	headers := []string{"OUI", "Name"}
 	if args.Wide {
 		headers = append(headers, "Address")
 	}

@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/rs/zerolog/log"
+
 	"rymnd.net/yeah/internal/vendors"
 )
 
@@ -15,7 +16,7 @@ var (
 		"https://standards-oui.ieee.org/oui/oui.csv",
 		"https://standards-oui.ieee.org/cid/cid.csv",
 		"https://standards-oui.ieee.org/iab/iab.csv",
-		"http://standards-oui.ieee.org/oui28/mam.csv",
+		"https://standards-oui.ieee.org/oui28/mam.csv",
 		"https://standards-oui.ieee.org/oui36/oui36.csv",
 	}
 )
@@ -41,6 +42,12 @@ func download(v *vendors.Vendors, source string) error {
 		return fmt.Errorf("failed to download %s: %s", source, resp.Status)
 	}
 
+	// Reference the source
+	if err := v.Reference(source, resp.Header.Get("Last-Modified")); err != nil {
+		return fmt.Errorf("failed to reference source: %w", err)
+	}
+
+	// Parse the CSV
 	reader := csv.NewReader(resp.Body)
 	reader.Comma = ','
 	reader.LazyQuotes = true
