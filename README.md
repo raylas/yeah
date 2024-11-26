@@ -26,6 +26,12 @@ Create Fly app:
 fly apps create --name yeah
 ```
 
+Secrets:
+
+```bash
+fly secrets set OTEL_EXPORTER_OTLP_HEADERS=x-honeycomb-team=<api_key>
+```
+
 Create a token and place as a GitHub repository secret named `FLY_API_TOKEN`:
 
 ```bash

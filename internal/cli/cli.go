@@ -22,7 +22,7 @@ func Run(ctx context.Context, args Args, v *vendors.Vendors) error {
 	// Search for vendors
 	var results []*vendors.VendorEntry
 	for _, mac := range args.Macs {
-		results = append(results, v.Search(mac)...)
+		results = append(results, v.Search(ctx, mac)...)
 	}
 
 	// Create output writer

@@ -11,8 +11,11 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 
 	"rymnd.net/yeah/internal/cli"
+	"rymnd.net/yeah/internal/tracing"
 	"rymnd.net/yeah/internal/vendors"
 )
 
@@ -28,6 +31,13 @@ func Run(ctx context.Context, args cli.Args, v *vendors.Vendors) error {
 		Timestamp().
 		Logger().
 		WithContext(ctx)
+
+	// Set up tracing
+	shutdown, err := tracing.Init(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to initialize tracing: %w", err)
+	}
+	defer shutdown()
 
 	// Set up routes
 	m := http.NewServeMux()
@@ -88,4 +98,12 @@ func logRequests(ctx context.Context, next http.Handler) http.Handler {
 		log.Ctx(ctx).Debug().Str("method", r.Method).Str("path", r.URL.Path).Msg("request")
 		next.ServeHTTP(w, r)
 	})
+}
+
+func setCommonAttributes(ctx context.Context, r *http.Request) {
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("user_agent", r.Header.Get("User-Agent")))
+	span.SetAttributes(attribute.String("referer", r.Header.Get("Referer")))
+	span.SetAttributes(attribute.String("remote_addr", r.RemoteAddr))
+	span.SetAttributes(attribute.String("path", r.URL.Path))
 }

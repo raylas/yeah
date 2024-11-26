@@ -1,6 +1,7 @@
 package vendors
 
 import (
+	"context"
 	"slices"
 	"testing"
 )
@@ -52,11 +53,12 @@ func TestInsertAndSearch(t *testing.T) {
 	}
 
 	for _, c := range cases {
+		ctx := context.Background()
 		v := New()
 		for _, vendor := range c.vendors {
 			v.Insert(vendor.Oui, &vendor)
 		}
-		results := v.Search(c.prefix)
+		results := v.Search(ctx, c.prefix)
 
 		if len(results) != len(c.expected) {
 			t.Errorf("expected %v, got %v", c.expected, results)

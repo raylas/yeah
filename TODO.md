@@ -6,7 +6,8 @@
 - [ ] CI
   - Updating vendors
   - Auto-deploys
-- [ ] Tracing/logs
+- [x] Tracing/logs
+- [ ] Bake in revision/version
 - [ ] Styling
 - [ ] Include address in HTML (checkbox)
 - [ ] Export JSON button

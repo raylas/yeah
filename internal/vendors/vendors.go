@@ -1,9 +1,13 @@
 package vendors
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"time"
+
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 )
 
 type VendorEntry struct {
@@ -60,7 +64,12 @@ func (v *Vendors) Insert(prefix string, data *VendorEntry) {
 	node.Data = data
 }
 
-func (v *Vendors) Search(prefix string) []*VendorEntry {
+func (v *Vendors) Search(ctx context.Context, prefix string) []*VendorEntry {
+	_, span := otel.Tracer("").Start(ctx, "search")
+	defer span.End()
+
+	span.SetAttributes(attribute.String("prefix", prefix))
+
 	normalized := normalize(prefix)
 	node := v.Root
 	var lastMatch *VendorNode
