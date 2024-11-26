@@ -101,9 +101,14 @@ func logRequests(ctx context.Context, next http.Handler) http.Handler {
 }
 
 func setCommonAttributes(ctx context.Context, r *http.Request) {
+	ip := r.Header.Get("Fly-Client-IP")
+	if ip == "" {
+		ip = r.RemoteAddr
+	}
+
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("user_agent", r.Header.Get("User-Agent")))
 	span.SetAttributes(attribute.String("referer", r.Header.Get("Referer")))
-	span.SetAttributes(attribute.String("remote_addr", r.RemoteAddr))
+	span.SetAttributes(attribute.String("remote_addr", ip))
 	span.SetAttributes(attribute.String("path", r.URL.Path))
 }
