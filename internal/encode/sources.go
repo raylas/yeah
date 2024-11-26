@@ -5,6 +5,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/rs/zerolog/log"
 
@@ -63,9 +64,9 @@ func download(v *vendors.Vendors, source string) error {
 			continue
 		}
 
-		oui := record[1]
-		org := record[2]
-		address := record[3]
+		oui := strings.TrimSpace(record[1])
+		org := strings.TrimSpace(record[2])
+		address := strings.TrimSpace(record[3])
 
 		v.Insert(oui, &vendors.VendorEntry{
 			Oui:     oui,

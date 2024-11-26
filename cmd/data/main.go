@@ -27,6 +27,7 @@ func run(ctx context.Context) error {
 	if err := encode.Vendors(ctx); err != nil {
 		return fmt.Errorf("failed to encode vendors: %w", err)
 	}
+
 	return nil
 }
 
