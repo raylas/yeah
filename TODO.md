@@ -11,6 +11,7 @@
 - [ ] Bake in revision/version
 - [ ] Styling
 - [ ] Favicon
+  - Shouldn't hit the searcher
 - [ ] Include address in HTML (checkbox)
 - [ ] Export JSON button
 - [ ] Performance profiling
