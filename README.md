@@ -25,7 +25,7 @@ go run cmd/data/main.go
 Install:
 
 - `go install rymnd.net/yeah`
-- [Binary releases]()
+- [Binary releases](https://github.com/raylas/yeah/releases)
 
 ```bash
 Usage: yeah [-w] [-o OUTPUT] [-l] [-b BIND] [-v LOGLEVEL] [MACS [MACS ...]]

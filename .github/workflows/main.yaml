@@ -23,6 +23,8 @@ jobs:
       with:
         go-version: ${{ env.GO_VERSION }}
 
+
+    - run: go run cmd/data/main.go
     - run: go test -v ./...
 
   release:
@@ -34,11 +36,11 @@ jobs:
       with:
         fetch-depth: 0
 
-    - uses: superfly/flyctl-actions/setup-flyctl@master
-
     - uses: actions/setup-go@v5
       with:
         go-version: ${{ env.GO_VERSION }}
+
+    - uses: superfly/flyctl-actions/setup-flyctl@master
 
     - run: go run cmd/data/main.go
 
