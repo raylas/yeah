@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "yeah",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/yeah/main.go",
+      // "args": ["3f"]
+    },
+    {
+      "name": "data",
+      "type": "go",
+      "request": "launch",
+      "program": "${workspaceFolder}/cmd/data/main.go"
+    }
+  ]
+}

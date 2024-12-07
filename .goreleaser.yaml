@@ -1,0 +1,15 @@
+builds:
+- main: ./cmd/yeah/main.go
+  binary: yeah
+  env:
+  - CGO_ENABLED=0
+  ldflags:
+  - -extldflags "-static"
+  flags:
+  - -trimpath
+  goos:
+  - linux
+  - darwin
+  goarch:
+  - amd64
+  - arm64

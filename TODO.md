@@ -1,0 +1,17 @@
+- [x] If anything beyond `3` in `3fcf42` doesn't exist, don't return all matches
+      for `3*`
+- [x] Trailing space on `address`
+- [ ] Ordering of results (alphabetic, by OUIs)
+- [ ] Ability to determine if it's locally-administered, etc.
+  - https://en.wikipedia.org/wiki/MAC_address#Universal_vs._local_(U/L_bit)
+- [ ] CI
+  - Updating vendors
+  - Auto-deploys
+- [x] Tracing/logs
+- [ ] Bake in revision/version
+- [ ] Styling
+- [ ] Favicon
+  - Shouldn't hit the searcher
+- [ ] Include address in HTML (checkbox)
+- [ ] Export JSON button
+- [ ] Performance profiling

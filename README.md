@@ -1,41 +1,82 @@
 # yeah
 
-[![crates.io](https://img.shields.io/crates/v/yeah.svg)](https://crates.io/crates/yeah)
+An API and CLI to return the assigned vendor for given MAC addresses.
 
-yeah is a command-line tool to return the vendor name for a given MAC address. 
+## Sources
 
-Queries are ran against the [IEEE OUI vendor list](http://standards-oui.ieee.org/oui.txt).
+Queries are ran against the IEEE OUI vendor lists:
 
-Functionality:
+- <https://standards-oui.ieee.org/oui/oui.csv>
+- <https://standards-oui.ieee.org/cid/cid.csv>
+- <https://standards-oui.ieee.org/iab/iab.csv>
+- <http://standards-oui.ieee.org/oui28/mam.csv>
+- <https://standards-oui.ieee.org/oui36/oui36.csv>
 
-- Complete and partial MAC address queries
-- Option to pretty-print an ASCII table for results
+## Usage
 
-Todo:
-
-- [ ] Caching of IEEE OUI list (~5MB)
-- [ ] Ability to pass multiple MAC addresses and return multiple match groups
-
-## Install yeah
-
-With crates.io:
-```bash
-cargo install yeah
-```
-
-From source:
-```bash
-cargo install --path /path/to/yeah/repo
-```
-
-Or, download and run the binary from [the latest release](https://github.com/raylas/yeah/releases).
-
-## Use yeah
+### Data
 
 ```bash
-yeah - return the vendor name for a given MAC address
-usage: yeah [options...] <mac>
- -t, --table        Print output as table
- -h, --help         Get help for commands
- -v, --version      Show version and quit
+go run cmd/data/main.go
 ```
+
+### CLI
+
+Install:
+
+- `go install rymnd.net/yeah`
+- [Binary releases](https://github.com/raylas/yeah/releases)
+
+```bash
+Usage: yeah [-w] [-o OUTPUT] [-l] [-b BIND] [-v LOGLEVEL] [MACS [MACS ...]]
+
+Positional arguments:
+  MACS
+
+Options:
+  -w                     include additional fields
+  -o OUTPUT              output format (table,json,html) [default: table]
+  -l                     run server
+  -b BIND                server bind address [default: :8080]
+  -v LOGLEVEL            log level (info,debug) [default: info]
+  --help, -h             display this help and exit
+```
+
+## Deployment
+
+```bash
+flyctl deploy --remote-only
+```
+
+### Initial
+
+Create Fly app:
+
+```bash
+fly apps create --name yeah
+```
+
+Secrets:
+
+```bash
+fly secrets set OTEL_EXPORTER_OTLP_HEADERS=x-honeycomb-team=<api_key>
+```
+
+Create a token and place as a GitHub repository secret named `FLY_API_TOKEN`:
+
+```bash
+fly tokens create deploy --app yeah --expiry 999999h
+```
+
+### DNS
+
+Once the application is deployed, grab its IPv6 and IPv4 addresses and create a
+pair of A/AAAA records for your domain.
+
+Then run:
+
+```bash
+fly certs create <domain_name>
+```
+
+If behind Cloudflare's proxy, it'll prompt you to add a `CNAME` record, too.

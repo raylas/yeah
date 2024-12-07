@@ -1,2 +1,4 @@
 .DS_Store
-/target
+*.gob
+TODO.md
+.env.local

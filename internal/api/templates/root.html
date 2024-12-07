@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>oui.so</title>
+  <style>
+    body {
+      font-family: "Verdana", sans-serif;
+      line-height: 1.4;
+      font-size: 14px;
+      color: #f0f0f0;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 10px;
+      background-color: #303030;
+    }
+
+    details {
+      margin-bottom: 20px;
+    }
+
+    code {
+      background-color: #202020;
+      display: block;
+      margin: 0 0 10px 0;
+      padding: 4px;
+      white-space: pre;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    textarea {
+      font-size: 16px;
+      width: 100%;
+      height: 100px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      padding: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th,
+    td {
+      padding: 4px;
+      text-align: left;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px 5px;
+      background-color: #202020;
+      border: 1px solid #505050;
+      color: #f0f0f0;
+      font-size: 16px;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+    }
+
+    button:hover {
+      background-color: #353535;
+    }
+
+    #title {
+      text-decoration: none;
+      font-weight: normal;
+    }
+
+    #usage {
+      margin: 20px 0 20px 0;
+    }
+
+    #results {
+      padding-top: 20px;
+    }
+
+
+    @media (prefers-color-scheme: light) {
+      body {
+        color: #303030;
+        background-color: #f0f0f0;
+      }
+
+      code {
+        background-color: #e0e0e0;
+      }
+
+      button {
+        background-color: #e0e0e0;
+        border: 1px solid #c0c0c0;
+        color: #303030;
+      }
+
+      button:hover {
+        background-color: #e5e5e5;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="usage">
+    <code>curl oui.so/&lt;mac&gt;[,&lt;mac&gt;...]
+curl oui.so/sources</code>
+  </div>
+
+  <details>
+    <summary>Sources</summary>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>URL</th>
+            <th>Revision</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Sources}}
+          <tr>
+            <td>{{.URL}}</td>
+            <td>{{.Rev.Format "2006-01-02"}}</td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+</details>
+
+  <form id="search">
+    <textarea id="ouis" placeholder="Enter MACs, one per line" required></textarea>
+    <button type="submit">Query</button>
+  </form>
+  <div id="results"></div>
+
+  <script>
+    document.getElementById('search').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const input = document.getElementById('ouis').value;
+      const query = input.split('\n').map(item => item.trim()).join(',');
+
+      fetch('/' + query + '/html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('results').innerHTML = html;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('result').textContent = 'An error occurred while fetching data.';
+        });
+    });
+  </script>
+</body>
+
+</html>
