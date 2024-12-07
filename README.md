@@ -24,7 +24,6 @@ go run cmd/data/main.go
 
 Install:
 
-- `go install rymnd.net/yeah`
 - [Binary releases](https://github.com/raylas/yeah/releases)
 
 ```bash
