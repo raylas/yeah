@@ -15,6 +15,9 @@ import (
 //go:embed templates/root.html
 var rootHTML string
 
+//go:embed static/favicon.ico
+var favicon []byte
+
 func handleHtmlRoot(v *vendors.Vendors) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, span := otel.Tracer("").Start(r.Context(), "handleHtmlRoot")
@@ -43,6 +46,13 @@ func handleRoot(v *vendors.Vendors) http.Handler {
 			return
 		}
 		handleHtmlRoot(v).ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+func handleFavicon() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "image/x-icon")
+		w.Write(favicon)
 	})
 }
 

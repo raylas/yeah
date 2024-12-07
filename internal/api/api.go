@@ -45,6 +45,7 @@ func Run(ctx context.Context, args cli.Args, v *vendors.Vendors) error {
 	m.Handle("/{query}/html", handleHtmlSearch(v))
 	m.Handle("/sources", handleSources(v))
 	m.Handle("/", handleRoot(v))
+	m.Handle("/favicon.ico", handleFavicon())
 
 	// Start the HTTP server
 	s := new(ctx, m)

@@ -12,10 +12,40 @@ Queries are ran against the IEEE OUI vendor lists:
 - <http://standards-oui.ieee.org/oui28/mam.csv>
 - <https://standards-oui.ieee.org/oui36/oui36.csv>
 
+## Usage
+
+### Data
+
+```bash
+go run cmd/data/main.go
+```
+
+### CLI
+
+Install:
+
+- `go install rymnd.net/yeah`
+- [Binary releases]()
+
+```bash
+Usage: yeah [-w] [-o OUTPUT] [-l] [-b BIND] [-v LOGLEVEL] [MACS [MACS ...]]
+
+Positional arguments:
+  MACS
+
+Options:
+  -w                     include additional fields
+  -o OUTPUT              output format (table,json,html) [default: table]
+  -l                     run server
+  -b BIND                server bind address [default: :8080]
+  -v LOGLEVEL            log level (info,debug) [default: info]
+  --help, -h             display this help and exit
+```
+
 ## Deployment
 
 ```bash
-just deploy
+flyctl deploy --remote-only
 ```
 
 ### Initial
